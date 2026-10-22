@@ -5,10 +5,11 @@ import {useSettings} from '@/lib/store/data';
 import {useUi, type View} from '@/lib/store/ui';
 import {BoardView} from './board/board-view';
 import {CommandPalette} from './command/command-palette';
+import {InboxView} from './inbox/inbox-view';
 import {useHotkeys} from './keyboard/use-hotkeys';
-import {ProjectDialog} from './projects/project-dialog';
+import {NewProjectDialog} from './projects/new-project-dialog';
 import {ProjectsView} from './projects/projects-view';
-import {InboxView, ReviewView} from './review/review-views';
+import {ReviewView} from './review/review-view';
 import {SettingsDialog} from './settings/settings-dialog';
 import {Sidebar} from './shell/sidebar';
 import {NewTaskDialog} from './task/new-task-dialog';
@@ -39,7 +40,7 @@ export function App() {
         <TaskSheet/>
       </div>
       <NewTaskDialog/>
-      <ProjectDialog/>
+      <NewProjectDialog/>
       <SettingsDialog/>
       <CommandPalette/>
       <Toaster/>

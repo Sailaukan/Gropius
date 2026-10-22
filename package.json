@@ -9,7 +9,6 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
     "tauri": "PATH=\"$HOME/.rustup/toolchains/stable-aarch64-apple-darwin/bin:$PATH\" tauri",
     "typecheck": "tsc",
     "lint:glaze": "eslint -c glaze.eslint.config.mjs .",
@@ -23,7 +22,6 @@
     "@fontsource/geist": "^5.3.0",
     "@fontsource/geist-mono": "^5.3.0",
     "@phosphor-icons/react": "^2.1.10",
-    "@tailwindcss/postcss": "^4.3.3",
     "@tauri-apps/api": "~2.12.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -33,7 +31,6 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
-    "@phosphor-icons/core": "^2.1.1",
     "@tailwindcss/vite": "^4.3.3",
     "@tauri-apps/cli": "~2.12.3",
     "@types/react": "^19.1.8",

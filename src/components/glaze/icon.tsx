@@ -12,7 +12,7 @@ import {
   UploadSimpleIcon, UserIcon, WarningIcon, WarningCircleIcon, WrenchIcon, XIcon, XCircleIcon, HourglassSimpleMediumIcon,
   // Gropius: views, priorities and the focus timer.
   AtIcon, CalendarCheckIcon, CaretDoubleUpIcon, CoffeeIcon, EqualsIcon, FolderSimpleIcon,
-  KanbanIcon, KeyboardIcon, ListChecksIcon, SidebarSimpleIcon, SkipForwardIcon, SlidersHorizontalIcon, TimerIcon,
+  KanbanIcon, ListChecksIcon, SidebarSimpleIcon, SlidersHorizontalIcon, TimerIcon,
   TrayArrowDownIcon, WarningOctagonIcon,
 } from '@phosphor-icons/react/ssr';
 import {cn} from '@/lib/glaze/utils';
@@ -111,7 +111,6 @@ export const Context = AtIcon;
 export const Display = SlidersHorizontalIcon;
 export const Focus = TimerIcon;
 export const Inbox = TrayArrowDownIcon;
-export const Keyboard = KeyboardIcon;
 export const PriorityHigh = CaretDoubleUpIcon;
 export const PriorityLow = CaretDownIcon;
 export const PriorityMedium = EqualsIcon;
@@ -119,7 +118,6 @@ export const PriorityUrgent = WarningOctagonIcon;
 export const Project = FolderSimpleIcon;
 export const Review = ListChecksIcon;
 export const Sidebar = SidebarSimpleIcon;
-export const Skip = SkipForwardIcon;
 export const Today = CalendarCheckIcon;
 
 export type GlazeIcon = PhosphorIcon;

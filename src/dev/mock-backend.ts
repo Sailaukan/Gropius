@@ -5,14 +5,13 @@
 import {mockIPC, mockWindows} from '@tauri-apps/api/mocks';
 import {emit} from '@tauri-apps/api/event';
 import type {Context, PomodoroSnapshot, Project, Settings, Task, TaskStatus} from '@/lib/domain/types';
-import {addDays, today} from '@/lib/domain/dates';
+import {addDays, DAY_MS, today} from '@/lib/domain/dates';
 import {useUi} from '@/lib/store/ui';
 
-const DAY = 24 * 60 * 60 * 1000;
 const now = Date.now();
-const ago = (days: number, hours = 0) => now - days * DAY - hours * 60 * 60 * 1000;
+const ago = (days: number, hours = 0) => now - days * DAY_MS - hours * 60 * 60 * 1000;
 
-const settings: Settings = {
+let settings: Settings = {
   visibleColumns: ['backlog', 'todo', 'in_progress', 'done'],
   showEmptyColumns: true,
   completedDays: 14,
@@ -105,8 +104,9 @@ function withStatus(t: Task, status: TaskStatus): Task {
 
 const handlers: Record<string, (args: Args) => unknown> = {
   app_bootstrap: () => ({tasks: [...tasks.values()], projects, contexts, settings, pomodoro}),
+  // A new object each time, as Rust sends: React skips a redraw when it gets back the object it drew last.
   settings_update: ({patch}) => {
-    Object.assign(settings, patch);
+    settings = {...settings, ...(patch as Partial<Settings>)};
     void emit('settings:changed', settings);
     return settings;
   },
@@ -165,7 +165,6 @@ const handlers: Record<string, (args: Args) => unknown> = {
   },
   context_rename: ({id, name}) => (contexts = contexts.map(c => c.id === id ? {...c, name: `@${String(name).replace(/^@/, '')}`} : c)),
   context_delete: ({id}) => (contexts = contexts.filter(c => c.id !== id)),
-  pomodoro_state: () => pomodoro,
   pomodoro_pause: () => (pomodoro = {...pomodoro, status: 'paused', remainingMs: Math.max(0, (pomodoro.endsAt ?? 0) - Date.now()), endsAt: null}),
   pomodoro_resume: () => (pomodoro = {...pomodoro, status: 'running', endsAt: Date.now() + pomodoro.remainingMs}),
   pomodoro_reset: () => (pomodoro = {...pomodoro, phase: 'focus', status: 'idle', endsAt: null, remainingMs: 25 * 60 * 1000, plannedMs: 25 * 60 * 1000}),
@@ -176,7 +175,6 @@ const handlers: Record<string, (args: Args) => unknown> = {
     return pomodoro;
   },
   pomodoro_skip: () => pomodoro,
-  pomodoro_link: () => pomodoro,
   capture_dismiss: () => undefined,
 };
 

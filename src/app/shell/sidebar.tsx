@@ -7,13 +7,14 @@ import {Badge} from '@/components/glaze/ui/badge';
 import {Button} from '@/components/glaze/ui/button';
 import {Item, ItemContent, ItemLink, ItemMedia, ItemTitle} from '@/components/glaze/ui/item';
 import {Kbd} from '@/components/glaze/ui/kbd';
+import {DAY_MS} from '@/lib/domain/dates';
 import {isInbox, todayBuckets} from '@/lib/domain/selectors';
 import {updateSettings} from '@/lib/store/actions';
 import {useData, useSettings} from '@/lib/store/data';
-import {href, NO_FILTERS, useUi, type View} from '@/lib/store/ui';
+import {filterBoard, href, useUi, type View} from '@/lib/store/ui';
 import {IconButton} from '@/app/ui/icon-button';
 
-const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+const WEEK_MS = 7 * DAY_MS;
 
 function NavRow({icon, label, link, selected, count, onClick, extra}: {
   icon?: GlazeIcon;
@@ -56,9 +57,6 @@ export function Sidebar() {
   const onlyFilter = (field: 'project' | 'context', id: number) =>
     view === 'board' && filters[field].length === 1 && filters[field][0] === String(id)
     && filters.search === '' && filters[field === 'project' ? 'context' : 'project'].length === 0;
-  // A project or context row opens the board filtered to it.
-  const showOn = (field: 'project' | 'context', id: number) => () =>
-    useUi.getState().setFilters({...NO_FILTERS, [field]: [String(id)]});
   const plainBoard = view === 'board' && !activeProjects.some(p => onlyFilter('project', p.id))
     && !contexts.some(c => onlyFilter('context', c.id));
   const isView = (v: View) => view === v && (v !== 'board' || plainBoard);
@@ -91,7 +89,7 @@ export function Sidebar() {
         {activeProjects.length
           ? <ul aria-label="Active projects" className="flex flex-col">
             {activeProjects.map(p => <NavRow key={p.id} label={p.name} link={href('board')}
-              selected={onlyFilter('project', p.id)} onClick={showOn('project', p.id)}/>)}
+              selected={onlyFilter('project', p.id)} onClick={() => filterBoard('project', p.id)}/>)}
           </ul>
           : <p className="ps-3 type-caption text-text-2">No projects yet</p>}
       </section>
@@ -103,7 +101,7 @@ export function Sidebar() {
         </div>
         <ul aria-label="Contexts" className="flex flex-col">
           {contexts.map(c => <NavRow key={c.id} icon={ContextIcon} label={c.name.slice(1)} link={href('board')}
-            selected={onlyFilter('context', c.id)} onClick={showOn('context', c.id)}/>)}
+            selected={onlyFilter('context', c.id)} onClick={() => filterBoard('context', c.id)}/>)}
         </ul>
       </section>
     </div>

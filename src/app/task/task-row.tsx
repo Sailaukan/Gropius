@@ -9,11 +9,11 @@ import {DueMark, PriorityMark, TaskStatusMark, TaskTags} from './task-marks';
 import {TaskMenuButton, useFocusVerb} from './task-menu';
 
 /** A task as a row in a list: its title opens it, the meta says where it stands, and focus and More sit at the end. */
-export function TaskRow({task, list, showDue = true, selected}: {task: Task; list: string; showDue?: boolean; selected?: boolean}) {
+export function TaskRow({task, list, showDue = true}: {task: Task; list: string; showDue?: boolean}) {
   const view = useUi(s => s.view);
   const open = useUi(s => s.task === task.id);
   const focusVerb = useFocusVerb(task.id);
-  return <Item selected={selected ?? open}>
+  return <Item selected={open}>
     <ItemContent>
       <ItemTitle>
         <ItemLink href={href(view, task.id)} data-task-link="" data-task-id={task.id} data-column={list} aria-current={open ? 'true' : undefined}>

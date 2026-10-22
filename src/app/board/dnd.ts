@@ -14,6 +14,9 @@ export function containerOf(id: string | number, columns: Columns): TaskStatus |
   return null;
 }
 
+/** Set while a card is carried by keyboard: the arrow keys belong to the drag then. */
+export const keyboardDrag = {active: false};
+
 /** The click that ends a pointer drag lands on the card's link; this lets the card ignore it. */
 export const cardDragged = {
   at: 0,

@@ -75,13 +75,11 @@ pub fn run() {
             commands::projects::context_rename,
             commands::projects::context_delete,
             commands::projects::context_restore,
-            commands::pomodoro::pomodoro_state,
             commands::pomodoro::pomodoro_start,
             commands::pomodoro::pomodoro_pause,
             commands::pomodoro::pomodoro_resume,
             commands::pomodoro::pomodoro_skip,
             commands::pomodoro::pomodoro_reset,
-            commands::pomodoro::pomodoro_link,
         ])
         .build(tauri::generate_context!())
         .expect("error while building Gropius")

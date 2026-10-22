@@ -9,7 +9,7 @@ export const VIEWS: View[] = ['inbox', 'today', 'board', 'review', 'projects'];
 
 export type FilterField = 'project' | 'context' | 'priority' | 'due';
 export type Filters = {search: string} & Record<FilterField, string[]>;
-export const NO_FILTERS: Filters = {search: '', project: [], context: [], priority: [], due: []};
+const NO_FILTERS: Filters = {search: '', project: [], context: [], priority: [], due: []};
 
 export type SettingsTab = 'general' | 'board' | 'pomodoro' | 'contexts' | 'shortcuts';
 
@@ -79,7 +79,11 @@ export function navigate(view: View, task: number | null = null) {
   window.location.hash = href(view, task);
 }
 
-export const openTask = (id: number) => navigate(useUi.getState().view, id);
 export const closeTask = () => navigate(useUi.getState().view);
+
+/** Narrows the board to one project or context, clearing every other filter. */
+export function filterBoard(field: 'project' | 'context', id: number) {
+  useUi.getState().setFilters({...NO_FILTERS, [field]: [String(id)]});
+}
 
 window.addEventListener('hashchange', () => useUi.setState(parse(window.location.hash)));

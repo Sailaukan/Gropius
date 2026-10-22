@@ -6,11 +6,6 @@ use crate::pomodoro::{Phase, Snapshot};
 use crate::timer::{self, Timer};
 use tauri::{AppHandle, State};
 
-#[tauri::command]
-pub async fn pomodoro_state(timer: State<'_, Timer>) -> AppResult<Snapshot> {
-    Ok(timer.snapshot())
-}
-
 /// Starts or resumes the timer. With a task, it is a focus session on that task: a break in the way is abandoned,
 /// and the task moves to In progress when the setting says so.
 #[tauri::command]
@@ -80,13 +75,4 @@ pub async fn pomodoro_skip(app: AppHandle, timer: State<'_, Timer>) -> AppResult
 #[tauri::command]
 pub async fn pomodoro_reset(app: AppHandle, timer: State<'_, Timer>) -> AppResult<Snapshot> {
     timer.run(&app, |engine, _, now| Ok(engine.reset(now)))
-}
-
-#[tauri::command]
-pub async fn pomodoro_link(app: AppHandle, timer: State<'_, Timer>, task_id: Option<i64>) -> AppResult<Snapshot> {
-    timer.run(&app, |engine, conn, _| {
-        let task = task_id.map(|id| timer::linked_task(conn, id)).transpose()?;
-        timer::link(engine, conn, task)?;
-        Ok(Vec::new())
-    })
 }

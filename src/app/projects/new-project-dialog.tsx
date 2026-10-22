@@ -9,7 +9,7 @@ import {commands, errorText} from '@/lib/tauri/commands';
 import {useUi} from '@/lib/store/ui';
 
 /** A new project: in GTD, any outcome that takes more than one action. */
-export function ProjectDialog() {
+export function NewProjectDialog() {
   const open = useUi(s => s.projectDialogOpen);
   const setOpen = useUi(s => s.setProjectDialogOpen);
   const nameRef = useRef<HTMLInputElement>(null);

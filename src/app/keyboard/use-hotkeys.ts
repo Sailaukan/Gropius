@@ -3,9 +3,7 @@ import {STATUSES} from '@/lib/domain/status';
 import {copyTaskKey, deleteTask, toggleFocus, undoLast, updateSettings, updateTask} from '@/lib/store/actions';
 import {getSettings, useData} from '@/lib/store/data';
 import {closeTask, navigate, useUi, VIEWS} from '@/lib/store/ui';
-
-/** Set while a card is carried by keyboard: the arrows belong to the drag then. */
-export const keyboardDrag = {active: false};
+import {keyboardDrag} from '@/app/board/dnd';
 
 /** Typing in a field, or a menu or dialog is open: single-key shortcuts stand down. */
 function busy(target: EventTarget | null): boolean {

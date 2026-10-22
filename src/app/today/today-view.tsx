@@ -4,8 +4,7 @@ import {Collapsible, CollapsibleContent, CollapsibleTrigger} from '@/components/
 import {Empty, EmptyDescription, EmptyHeader, EmptyTitle} from '@/components/glaze/ui/empty-state';
 import {ItemGroup} from '@/components/glaze/ui/item';
 import {today} from '@/lib/domain/dates';
-import {todayBuckets} from '@/lib/domain/selectors';
-import {sortColumn} from '@/lib/domain/selectors';
+import {sortColumn, todayBuckets} from '@/lib/domain/selectors';
 import type {Task} from '@/lib/domain/types';
 import {useData} from '@/lib/store/data';
 import {useUi} from '@/lib/store/ui';

@@ -2,7 +2,6 @@ import './index.css';
 import '@/components/glaze/styles.css';
 import '@fontsource/geist/400.css';
 import '@fontsource/geist/500.css';
-import '@fontsource/geist/600.css';
 import '@fontsource/geist-mono/400.css';
 import '@fontsource/geist-mono/500.css';
 
@@ -24,7 +23,6 @@ async function boot() {
     syncTheme();
     createRoot(document.getElementById('root')!).render(<StrictMode><App/></StrictMode>);
     preview?.openPreviewOverlay();
-    if (import.meta.env.DEV && import.meta.env.VITE_SELF_TEST) void import('@/dev/self-test').then(m => m.runSelfTest());
   } finally {
     // The window starts hidden so it never flashes white. Show it now that the page has its styles and first render;
     // not from requestAnimationFrame, which WebKit never runs for a window that is still hidden.

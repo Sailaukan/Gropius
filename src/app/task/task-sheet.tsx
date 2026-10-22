@@ -1,7 +1,6 @@
 import {useEffect, useState, useSyncExternalStore} from 'react';
 import {Icon, More} from '@/components/glaze/icon';
 import {Button} from '@/components/glaze/ui/button';
-import {Collapsible, CollapsibleContent, CollapsibleTrigger} from '@/components/glaze/ui/collapsible';
 import {DropdownMenu, DropdownMenuContent, DropdownMenuTrigger} from '@/components/glaze/ui/dropdown-menu';
 import {Field, FieldLabel} from '@/components/glaze/ui/field';
 import {RelativeTime} from '@/components/glaze/ui/relative-time';
@@ -9,15 +8,14 @@ import {
   Sheet, SheetAction, SheetBody, SheetClose, SheetContent, SheetDescription, SheetField, SheetFooter, SheetHeader,
   SheetSection, SheetTitle, useSheet,
 } from '@/components/glaze/ui/sheet';
-import {Status} from '@/components/glaze/ui/status';
 import {Textarea} from '@/components/glaze/ui/textarea';
 import {shortDate} from '@/lib/domain/dates';
 import {isClosed, statusLabel, taskKey} from '@/lib/domain/status';
-import type {Session, Task} from '@/lib/domain/types';
-import {commands} from '@/lib/tauri/commands';
+import type {Task} from '@/lib/domain/types';
 import {toggleFocus, updateTask} from '@/lib/store/actions';
 import {useData} from '@/lib/store/data';
 import {closeTask, useUi} from '@/lib/store/ui';
+import {FocusSection} from './focus-section';
 import {ContextsPicker, DuePicker, PriorityPicker, ProjectPicker, StatusPicker} from './property-pills';
 import {TaskMenuItems, useFocusVerb} from './task-menu';
 
@@ -162,38 +160,4 @@ function TaskDetails({task}: {task: Task}) {
         : <SheetAction close={false} onClick={() => void toggleFocus(task.id)} aria-keyshortcuts="T">{focusVerb}</SheetAction>}
     </SheetFooter>
   </>;
-}
-
-/** How many focus sessions the task has had, and each one. */
-function FocusSection({task}: {task: Task}) {
-  const [sessions, setSessions] = useState<Session[] | null>(null);
-  useEffect(() => {
-    let current = true;
-    void commands.taskSessions(task.id).then(list => { if (current) setSessions(list); });
-    return () => { current = false; };
-  }, [task.id, task.pomodorosCompleted]);
-
-  const minutes = Math.round((sessions ?? []).filter(s => s.completed).reduce((sum, s) => sum + s.plannedMs, 0) / 60_000);
-  const total = minutes >= 60 ? `${Math.floor(minutes / 60)}h ${minutes % 60}m` : `${minutes} min`;
-  return <div className="flex flex-col gap-2">
-    <SheetSection title="Focus">
-      <SheetField label="Pomodoros">
-        {task.pomodorosCompleted === 0 ? 'None yet' : `${task.pomodorosCompleted} completed, ${total}`}
-      </SheetField>
-    </SheetSection>
-    {sessions && sessions.length > 0 && <Collapsible>
-      <CollapsibleTrigger size="sm" summary={`${sessions.length}`}>Session history</CollapsibleTrigger>
-      <CollapsibleContent>
-        <ul className="flex flex-col pt-2">
-          {sessions.map(s => <li key={s.id} className="rule-row flex min-h-(--row) items-center gap-3 py-1">
-            <span className="type-body-sm text-text-1">{new Date(s.startedAt).toLocaleString(undefined, {month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'})}</span>
-            <span className="type-caption text-text-2">{Math.round(s.plannedMs / 60_000)} min</span>
-            <span className="ms-auto">{s.completed
-              ? <Status status="ok" size="sm">Completed</Status>
-              : <Status status="idle" size="sm">Stopped early</Status>}</span>
-          </li>)}
-        </ul>
-      </CollapsibleContent>
-    </Collapsible>}
-  </div>;
 }

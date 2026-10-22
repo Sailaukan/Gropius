@@ -10,8 +10,8 @@ import {Empty, EmptyHeader, EmptyTitle} from '@/components/glaze/ui/empty-state'
 import {Status} from '@/components/glaze/ui/status';
 import {isClosed, statusLabel} from '@/lib/domain/status';
 import type {Task, TaskStatus} from '@/lib/domain/types';
-import {updateSettings} from '@/lib/store/actions';
-import {getSettings, useSettings} from '@/lib/store/data';
+import {setColumnVisible} from '@/lib/store/actions';
+import {useSettings} from '@/lib/store/data';
 import {useUi} from '@/lib/store/ui';
 import {IconButton} from '@/app/ui/icon-button';
 import {TaskStatusMark} from '@/app/task/task-marks';
@@ -61,7 +61,6 @@ function ColumnHeader({status, count, older}: {status: TaskStatus; count: number
   const label = statusLabel[status];
   const overLimit = status === 'in_progress' && settings.wipLimit > 0 && count > settings.wipLimit;
   const addTask = () => useUi.getState().openNewTask({status});
-  const hide = () => void updateSettings({visibleColumns: getSettings().visibleColumns.filter(s => s !== status)});
 
   return <div className="flex h-(--row) shrink-0 items-center gap-2 ps-3 pe-1">
     <h2 id={`column-${status}`} className="flex min-w-0 items-center"><TaskStatusMark status={status}/></h2>
@@ -78,7 +77,9 @@ function ColumnHeader({status, count, older}: {status: TaskStatus; count: number
             Show older tasks
           </DropdownMenuCheckboxItem>}
           <DropdownMenuSeparator/>
-          <DropdownMenuItem onClick={hide}>Hide column</DropdownMenuItem>
+          <DropdownMenuItem disabled={settings.visibleColumns.length === 1} onClick={() => setColumnVisible(status, false)}>
+            Hide column
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <IconButton label={`Add task to ${label}`} icon={Add} onClick={addTask}/>

@@ -22,12 +22,12 @@ export function PriorityMark({priority}: {priority: Priority}) {
 }
 
 /**
- * The status as Glaze says it: a glyph and a word. The In progress arc only turns for the task being focused on,
- * so a column of work in progress does not spin.
+ * The status as Glaze says it: a glyph and a word. The In progress arc stays still here, so a column of work in
+ * progress does not spin; only the Focusing mark of the task being timed turns.
  */
-export function TaskStatusMark({status, size = 'default', live = false}: {status: TaskStatus; size?: 'default' | 'sm'; live?: boolean}) {
+export function TaskStatusMark({status, size = 'default'}: {status: TaskStatus; size?: 'default' | 'sm'}) {
   const mark = <Status status={statusTone[status]} size={size}>{statusLabel[status]}</Status>;
-  return status === 'in_progress' && !live ? <span data-force-reduced-motion="">{mark}</span> : mark;
+  return status === 'in_progress' ? <span data-force-reduced-motion="">{mark}</span> : mark;
 }
 
 /**

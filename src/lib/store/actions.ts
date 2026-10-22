@@ -4,10 +4,10 @@
 import {toast} from '@/components/glaze/ui/toast';
 import {between} from '@/lib/domain/order';
 import {sortColumn} from '@/lib/domain/selectors';
-import {statusLabel, taskKey} from '@/lib/domain/status';
-import type {NewTask, Settings, Task, TaskPatch, TaskStatus} from '@/lib/domain/types';
+import {STATUSES, statusLabel, taskKey} from '@/lib/domain/status';
+import type {Settings, Task, TaskPatch, TaskStatus} from '@/lib/domain/types';
 import {commands, errorText} from '@/lib/tauri/commands';
-import {useData} from './data';
+import {getSettings, useData} from './data';
 import {closeTask, useUi} from './ui';
 
 type Undo = {label: string; run: () => Promise<unknown>};
@@ -40,12 +40,6 @@ function neighbours(id: number, status: TaskStatus): [number | null, number | nu
   const column = sortColumn(Object.values(useData.getState().tasks).filter(t => t.status === status), status);
   const index = column.findIndex(t => t.id === id);
   return [column[index - 1]?.id ?? null, column[index + 1]?.id ?? null];
-}
-
-export async function createTask(input: NewTask): Promise<Task | undefined> {
-  const created = await attempt(commands.createTask(input), "Couldn't create the task");
-  if (created) useData.getState().upsertTasks([created]);
-  return created;
 }
 
 /** Saves a change to a task. Status changes can be undone, back to the same place in the old column. */
@@ -126,6 +120,13 @@ export async function updateSettings(patch: Partial<Settings>) {
     toast.fail("Couldn't save the setting", {description: errorText(error)});
     return false;
   }
+}
+
+/** Shows or hides a board column. The last column shown stays, so the board is never empty. */
+export function setColumnVisible(status: TaskStatus, visible: boolean) {
+  const current = getSettings().visibleColumns;
+  const next = visible ? [...current, status] : current.filter(s => s !== status);
+  if (next.length) void updateSettings({visibleColumns: STATUSES.filter(s => next.includes(s))});
 }
 
 export async function createProject(name: string, outcome = '') {

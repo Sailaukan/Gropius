@@ -1,6 +1,6 @@
 // Due dates are local calendar days written YYYY-MM-DD, so they never shift with the time zone.
 
-const DAY_MS = 24 * 60 * 60 * 1000;
+export const DAY_MS = 24 * 60 * 60 * 1000;
 
 export function toDay(date: Date): string {
   const y = date.getFullYear();
@@ -23,7 +23,7 @@ export function addDays(day: string, days: number): string {
 }
 
 /** Whole calendar days from a to b; negative when b is earlier. */
-export function daysBetween(a: string, b: string): number {
+function daysBetween(a: string, b: string): number {
   return Math.round((fromDay(b).getTime() - fromDay(a).getTime()) / DAY_MS);
 }
 

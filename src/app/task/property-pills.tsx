@@ -16,11 +16,9 @@ import {createContext, createProject} from '@/lib/store/actions';
 import {useData, useSettings} from '@/lib/store/data';
 import {priorityIcon} from './task-marks';
 
-type Size = 'sm' | 'default';
-
-export function StatusPicker({value, onChange, size = 'sm'}: {value: TaskStatus; onChange: (s: TaskStatus) => void; size?: Size}) {
+export function StatusPicker({value, onChange}: {value: TaskStatus; onChange: (s: TaskStatus) => void}) {
   return <DropdownMenu>
-    <DropdownMenuTrigger render={<Button variant="secondary" size={size} aria-label={`Status: ${statusLabel[value]}`}/>}>
+    <DropdownMenuTrigger render={<Button variant="secondary" size="sm" aria-label={`Status: ${statusLabel[value]}`}/>}>
       {/* The arc stays still here: it turns only for the session being timed. */}
       <span data-force-reduced-motion="" className="contents"><StatusMark status={statusTone[value]}/></span>
       {statusLabel[value]}
@@ -35,9 +33,9 @@ export function StatusPicker({value, onChange, size = 'sm'}: {value: TaskStatus;
   </DropdownMenu>;
 }
 
-export function PriorityPicker({value, onChange, size = 'sm'}: {value: Priority; onChange: (p: Priority) => void; size?: Size}) {
+export function PriorityPicker({value, onChange}: {value: Priority; onChange: (p: Priority) => void}) {
   return <DropdownMenu>
-    <DropdownMenuTrigger render={<Button variant="secondary" size={size} aria-label={`Priority: ${priorityLabel[value]}`}/>}>
+    <DropdownMenuTrigger render={<Button variant="secondary" size="sm" aria-label={`Priority: ${priorityLabel[value]}`}/>}>
       <Icon icon={priorityIcon[value]}/>
       {value === 0 ? 'Priority' : priorityLabel[value]}
     </DropdownMenuTrigger>
@@ -50,7 +48,7 @@ export function PriorityPicker({value, onChange, size = 'sm'}: {value: Priority;
 }
 
 /** Picks one project by typing, and makes a new one when nothing matches. */
-export function ProjectPicker({value, onChange, size = 'sm'}: {value: number | null; onChange: (id: number | null) => void; size?: Size}) {
+export function ProjectPicker({value, onChange}: {value: number | null; onChange: (id: number | null) => void}) {
   const projects = useData(s => s.projects);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -64,7 +62,7 @@ export function ProjectPicker({value, onChange, size = 'sm'}: {value: number | n
   };
 
   return <Popover open={open} onOpenChange={setOpen}>
-    <PopoverTrigger render={<Button variant="secondary" size={size} aria-label={`Project: ${current?.name ?? 'none'}`}/>}>
+    <PopoverTrigger render={<Button variant="secondary" size="sm" aria-label={`Project: ${current?.name ?? 'none'}`}/>}>
       <Icon icon={ProjectIcon}/>{current?.name ?? 'Project'}
     </PopoverTrigger>
     <PopoverContent align="start" className="w-64 gap-0 p-0">
@@ -94,7 +92,7 @@ export function ProjectPicker({value, onChange, size = 'sm'}: {value: number | n
 }
 
 /** Picks any number of contexts; the list stays open while you tick them. */
-export function ContextsPicker({value, onChange, size = 'sm'}: {value: number[]; onChange: (ids: number[]) => void; size?: Size}) {
+export function ContextsPicker({value, onChange}: {value: number[]; onChange: (ids: number[]) => void}) {
   const contexts = useData(s => s.contexts);
   const [query, setQuery] = useState('');
   const chosen = contexts.filter(c => value.includes(c.id));
@@ -104,7 +102,7 @@ export function ContextsPicker({value, onChange, size = 'sm'}: {value: number[];
   const label = chosen.length === 0 ? 'Contexts' : chosen.length <= 2 ? chosen.map(c => c.name).join(', ') : `${chosen.length} contexts`;
 
   return <Popover onOpenChange={open => { if (!open) setQuery(''); }}>
-    <PopoverTrigger render={<Button variant="secondary" size={size} aria-label={`Contexts: ${chosen.map(c => c.name).join(', ') || 'none'}`}/>}>
+    <PopoverTrigger render={<Button variant="secondary" size="sm" aria-label={`Contexts: ${chosen.map(c => c.name).join(', ') || 'none'}`}/>}>
       <Icon icon={ContextIcon}/>{label}
     </PopoverTrigger>
     <PopoverContent align="start" className="w-64 gap-0 p-0">
@@ -132,10 +130,10 @@ export function ContextsPicker({value, onChange, size = 'sm'}: {value: number[];
   </Popover>;
 }
 
-export function DuePicker({value, onChange, size = 'sm'}: {value: string | null; onChange: (day: string | null) => void; size?: Size}) {
+export function DuePicker({value, onChange}: {value: string | null; onChange: (day: string | null) => void}) {
   const {weekStartsOn} = useSettings();
   return <DatePicker
-    size={size}
+    size="sm"
     className="w-40"
     clearable
     aria-label="Due date"

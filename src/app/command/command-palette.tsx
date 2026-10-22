@@ -5,9 +5,9 @@ import {
 } from '@/components/glaze/ui/command';
 import {STATUSES, statusLabel, taskKey} from '@/lib/domain/status';
 import type {TaskStatus} from '@/lib/domain/types';
-import {copyTaskKey, deleteTask, timer, toggleFocus, undoLast, updateSettings, updateTask} from '@/lib/store/actions';
+import {copyTaskKey, deleteTask, setColumnVisible, timer, toggleFocus, undoLast, updateSettings, updateTask} from '@/lib/store/actions';
 import {getSettings, useData} from '@/lib/store/data';
-import {navigate, NO_FILTERS, useUi, type View} from '@/lib/store/ui';
+import {filterBoard, navigate, useUi, type View} from '@/lib/store/ui';
 
 const GO_TO: {view: View; label: string; keys: string[]}[] = [
   {view: 'inbox', label: 'Go to Inbox', keys: ['⌘', '1']},
@@ -36,14 +36,10 @@ export function CommandPalette() {
     void action();
   };
   const showOn = (field: 'project' | 'context', id: number) => run(() => {
-    useUi.getState().setFilters({...NO_FILTERS, [field]: [String(id)]});
+    filterBoard(field, id);
     navigate('board');
   });
-  const toggleColumn = (status: TaskStatus) => run(() => {
-    const visible = getSettings().visibleColumns;
-    const next = visible.includes(status) ? visible.filter(s => s !== status) : [...visible, status];
-    if (next.length) void updateSettings({visibleColumns: STATUSES.filter(s => next.includes(s))});
-  });
+  const toggleColumn = (status: TaskStatus) => run(() => setColumnVisible(status, !getSettings().visibleColumns.includes(status)));
 
   return <CommandDialog open={open} onOpenChange={setOpen} title="Search tasks and commands">
     <Command label="Search tasks and commands">

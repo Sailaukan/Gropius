@@ -1,11 +1,9 @@
 // Pure views over the task list: board columns, the inbox, stalled work, what is due.
 
 import {closedAt, isClosed, STATUSES, taskKey} from './status';
-import {dueState, endOfWeek, startOfToday, today} from './dates';
+import {DAY_MS, dueState, endOfWeek, startOfToday, today} from './dates';
 import {priorityRank} from './priority';
 import type {Context, Project, Task, TaskStatus} from './types';
-
-const DAY_MS = 24 * 60 * 60 * 1000;
 
 /** A column's order: open columns as arranged, closed ones newest first. */
 export function sortColumn(tasks: Task[], status: TaskStatus): Task[] {

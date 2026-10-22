@@ -5,11 +5,10 @@ import {Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger} fr
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/glaze/ui/select';
 import {Switch} from '@/components/glaze/ui/switch';
 import {STATUSES, statusLabel} from '@/lib/domain/status';
-import type {TaskStatus} from '@/lib/domain/types';
-import {updateSettings} from '@/lib/store/actions';
+import {setColumnVisible, updateSettings} from '@/lib/store/actions';
 import {useSettings} from '@/lib/store/data';
 
-export const COMPLETED_WINDOWS = [
+const COMPLETED_WINDOWS = [
   {value: '7', label: 'Last 7 days'},
   {value: '14', label: 'Last 14 days'},
   {value: '30', label: 'Last 30 days'},
@@ -19,17 +18,13 @@ export const COMPLETED_WINDOWS = [
 /** Which columns show, kept in the settings. At least one column always stays. */
 export function ColumnSwitches() {
   const {visibleColumns} = useSettings();
-  const toggle = (status: TaskStatus, on: boolean) => {
-    const next = on ? [...visibleColumns, status] : visibleColumns.filter(s => s !== status);
-    void updateSettings({visibleColumns: STATUSES.filter(s => next.includes(s))});
-  };
   return <div role="group" aria-labelledby="columns-label" className="flex flex-col gap-2">
     <p id="columns-label" className="type-label-sm text-text-2">Columns</p>
     {STATUSES.map(status => {
       const on = visibleColumns.includes(status);
       return <Field key={status} orientation="horizontal">
         <FieldLabel>{statusLabel[status]}</FieldLabel>
-        <Switch size="sm" checked={on} disabled={on && visibleColumns.length === 1} onCheckedChange={next => toggle(status, next)}/>
+        <Switch size="sm" checked={on} disabled={on && visibleColumns.length === 1} onCheckedChange={next => setColumnVisible(status, next)}/>
       </Field>;
     })}
   </div>;

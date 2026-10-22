@@ -37,7 +37,6 @@ export const commands = {
   pomodoroResume: () => invoke<PomodoroSnapshot>('pomodoro_resume'),
   pomodoroSkip: () => invoke<PomodoroSnapshot>('pomodoro_skip'),
   pomodoroReset: () => invoke<PomodoroSnapshot>('pomodoro_reset'),
-  pomodoroLink: (taskId: number | null) => invoke<PomodoroSnapshot>('pomodoro_link', {taskId}),
 };
 
 /** Rust sends errors as plain sentences; anything else becomes one. */
