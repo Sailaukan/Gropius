@@ -1,0 +1,16 @@
+/* Preflight only. Glaze's own stylesheet (components/glaze/styles.css) holds the scoped base, tokens and utilities. */
+@import "tailwindcss" source(none);
+
+html, body, #root { height: 100%; }
+html, body { overscroll-behavior: none; }
+html[data-window="capture"], html[data-window="capture"] body { background: transparent; }
+
+/* The capture box floats over other apps, so unlike the rest of Glaze it casts a shadow, as a macOS panel does. Its
+   corner is the field's plus the 12px and the line between them, so the two curves run parallel. */
+html[data-window="capture"] [data-capture-box] {
+  border-radius: calc(var(--radius-overlay) + var(--space-3) + var(--line-width));
+  box-shadow: 0 16px 40px -12px rgb(0 0 0 / 0.3), 0 4px 12px -4px rgb(0 0 0 / 0.12);
+}
+html[data-window="capture"][data-theme="dark"] [data-capture-box] {
+  box-shadow: 0 16px 40px -12px rgb(0 0 0 / 0.7), 0 4px 12px -4px rgb(0 0 0 / 0.45);
+}

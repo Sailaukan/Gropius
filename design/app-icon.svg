@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Gropius: three board columns on ink, the last one shorter as work moves to done. -->
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a2a2a"/>
+      <stop offset="1" stop-color="#0c0c0c"/>
+    </linearGradient>
+  </defs>
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#tile)"/>
+  <rect x="100.5" y="100.5" width="823" height="823" rx="184.5" fill="none" stroke="#ffffff" stroke-opacity="0.12"/>
+  <g fill="#f4f4f3">
+    <rect x="262" y="262" width="140" height="500" rx="40"/>
+    <rect x="442" y="262" width="140" height="380" rx="40" fill-opacity="0.82"/>
+    <rect x="622" y="262" width="140" height="240" rx="40" fill-opacity="0.64"/>
+  </g>
+</svg>

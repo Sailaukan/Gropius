@@ -1,0 +1,59 @@
+[package]
+name = "gropius"
+version = "0.1.0"
+description = "A local GTD board with a menu bar Pomodoro"
+authors = ["Shakhnazar Sailaukan"]
+license = "MIT"
+repository = "https://github.com/Sailaukan/Gropius"
+edition = "2024"
+
+[lib]
+# The `_lib` suffix may seem redundant but it is necessary
+# to make the lib name unique and wouldn't conflict with the bin name.
+# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+name = "gropius_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "~2.7", features = [] }
+
+[dependencies]
+# Pinned to 2.12: tray.rs reaches into tray-icon's NSStatusItem, which is not a stable API.
+tauri = { version = "~2.12", features = ["tray-icon", "image-png"] }
+tauri-plugin-notification = "~2.7"
+tauri-plugin-global-shortcut = "~2.4"
+rusqlite = { version = "0.40", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+# Must match the versions tray-icon 0.25 uses, so NSStatusItem is the same type on both sides.
+objc2 = "0.6"
+objc2-foundation = { version = "0.3.2", default-features = false, features = ["std", "NSString", "NSUserDefaults"] }
+objc2-app-kit = { version = "0.3.2", default-features = false, features = [
+  "std",
+  "objc2-core-foundation",
+  "NSResponder",
+  "NSView",
+  "NSControl",
+  "NSButton",
+  "NSButtonCell",
+  "NSCell",
+  "NSStatusBarButton",
+  "NSStatusItem",
+  "NSFont",
+  "NSFontDescriptor",
+  "NSSound",
+  "NSWorkspace",
+  "NSRunningApplication",
+  "libc",
+] }
+
+# Read the optimization guideline for more details: https://tauri.app/concept/size/#cargo-configuration
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true
